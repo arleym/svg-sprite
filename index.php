@@ -7,8 +7,6 @@
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-<?php include('functions.php'); ?>
-
   <div class="container-fluid">
     <div class="row">
       <div class="col-md-2 bg-light">
@@ -18,9 +16,7 @@
       </div><!-- col -->
       <div class="col-md-10">
         <div class="p-4">
-          <section class="w-icons">
-            <?php include('list-svgs.php'); ?>
-          </section><!-- w-icons -->
+          <?php include('list-svgs.php'); ?>
         </div>
       </div><!-- col -->
 

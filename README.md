@@ -36,3 +36,5 @@ Looking to craft tight little SVG sprites with handy code comments to `<use>` ic
 - A button to just copy the SVG as an element
 - Add folders as accordions
 - Accordion itself having a select-all for that collection
+- if h1 has no svgs, remove
+- JS to make a scrollspy from h1s

@@ -14,10 +14,13 @@ body {
 Sizing the SVG is tricky - wildly different sizes, ratios, and inline attr!
 
 */
+
+/* Wraps a collection */
 .w-icons {
   display: flex;
   flex-wrap: wrap;
 }
+/* SVG item */
 .svg-icon {
   position: relative;
   display: inline-block;
@@ -29,6 +32,7 @@ Sizing the SVG is tricky - wildly different sizes, ratios, and inline attr!
   background-color: #fff;
   cursor: pointer;
 }
+  /* The svg object from the icons folder*/
   .svg-icon svg {
     max-width: 100% !important;
     max-height: calc(100% - 2.2em) !important;
@@ -43,19 +47,30 @@ Sizing the SVG is tricky - wildly different sizes, ratios, and inline attr!
     background: #007700;
     color: #fff;
   }
+  /* Removing the hover is a good way to hunt for path fill problems */
   .svg-icon:hover svg * {
     fill: #fff !important;
   }
 
+  /* Searchable name */
   .icon-label {
     display: block;
     text-align: center;
     position: relative;
     z-index: 2;
   }
+  /* Hidden checkmark we use for sprite building */
   .js-spritecheck {
     position: absolute;
     z-index: -1;
+  }
+  /* The number of SVGs in an accordion */
+  .svg-count {
+    position: absolute;
+    top: 1.5em;
+    text-align: right;
+    right: 1.5em;
+    z-index: 0;
   }
 
 /*
