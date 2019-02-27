@@ -29,13 +29,12 @@ function findFiles($directory, $extensions = array()) {
         $files[$extension][] = $file;
 
         // wrap the icon and output with label
-        echo "<label class='svg-icon'>";
+        echo "<div class='svg-icon'>";
           include $file;
-          echo "<div class='p-2'><input class='js-spritecheck' type='checkbox'>";
-          echo "<div class='icon-label'>";
+          echo "<div class='p-2'><div class='icon-label'><input class='js-spritecheck' type='checkbox'>";
           // echo dirname($file, 1); // we could list the path
           echo basename($file, '.svg').PHP_EOL;
-        echo "</div></div></label>\n\n";
+        echo "</div></div></div>\n\n";
 
         $svg++;
       }

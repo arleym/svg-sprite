@@ -11,19 +11,30 @@ $(function() {
 
     // Create nav links
     // substring to remove the common "icons/" path
-    $('#svg-nav').append('<li><a data-toggle="collapse" href="' +
+    $('#svg-nav').append('<a class="nav-link" data-toggle="collapse" href="' +
         $(this).attr("href") + '">' +
         $(this).text().substring(6) +
-      "</a></li>");
+      "</a>");
   });
 
   // Expand first collection of SVGs after loading
   $('.svg-collection-title').first().click();
 
-  // SPRITES!
+  // to have all expanded by default
+  // $('.svg-collection-title').click();
 
-  $( "#target" ).click(function() {
-    //
+  $('#all-show').click(function() {
+    $('.w-icons.collapse').collapse('show');
+  });
+  $('#all-hide').click(function() {
+    $('.w-icons.collapse').collapse('hide');
+  });
+
+
+  // SPRITES!
+  // Select icon
+  $(".svg-icon").click(function() {
+    $(this).toggleClass("active");
   });
 
 });
