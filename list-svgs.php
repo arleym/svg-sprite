@@ -18,8 +18,8 @@ function findFiles($directory, $extensions = array()) {
   foreach($directories as $directory) {
 
     // Folder title plus a flexbox wrapper for each icon
-    echo "<div class='position-relative'><a class='d-block card' data-toggle='collapse' href='#collaps" . $i . "' role='button' aria-expanded='false' aria-controls='collaps" . $i . "'>";
-    echo "<h1 class='js-svg-collection'>" . $directory . "</h1></a><section class='w-icons collapse' id='collaps" . $i . "'>";
+    echo "<div id='svg-collection-" . $i . "' class='js-collection position-relative'><a class='svg-collection-title p-2 d-block card' data-toggle='collapse' href='#collapse" . $i . "' role='button' aria-expanded='false' aria-controls='collapse" . $i . "'>";
+    echo "<h3 class='js-svg-collection h4'>" . $directory . "</h3></a><section class='w-icons collapse' id='collapse" . $i . "'>";
 
     foreach($extensions as $extension) {
 
@@ -40,7 +40,7 @@ function findFiles($directory, $extensions = array()) {
         $svg++;
       }
     }
-    echo "</section><span class='svg-count'>" . $svg . " SVGs</div>";
+    echo "</section><span class='svg-counter'><span class='js-count'>" . $svg . "</span> SVGs</span></div>";
     $i++;
   }
 }

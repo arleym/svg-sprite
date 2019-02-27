@@ -28,13 +28,12 @@ Looking to craft tight little SVG sprites with handy code comments to `<use>` ic
 
 
 ## TODO
-- sizing all the SVGs regardless of markup
 - selectable states of icons
 - JS gymnastics to add icons as sprites
   - Submit button to generate the sprite on demand vs. fuzzily on check
 - Add the aria stuff for the sprites in the comment block version with `<use>`
 - A button to just copy the SVG as an element
-- Add folders as accordions
 - Accordion itself having a select-all for that collection
 - if h1 has no svgs, remove
 - JS to make a scrollspy from h1s
+- auto expand first accordion with icons

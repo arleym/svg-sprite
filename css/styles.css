@@ -65,10 +65,9 @@ Sizing the SVG is tricky - wildly different sizes, ratios, and inline attr!
     z-index: -1;
   }
   /* The number of SVGs in an accordion */
-  .svg-count {
+  .svg-counter {
     position: absolute;
-    top: 1.5em;
-    text-align: right;
+    top: 1.4em;
     right: 1.5em;
     z-index: 0;
   }
