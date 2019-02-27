@@ -24,14 +24,17 @@ Sizing the SVG is tricky - wildly different sizes, ratios, and inline attr!
 .svg-icon {
   position: relative;
   display: inline-block;
+  max-width: 100%;
   width: 10em;
-  float: left;
   margin: 0.5em;
   padding: 0.5em;
-  overflow: hidden;
   background-color: #fff;
   cursor: pointer;
 }
+  /* wraps SVG w-svg */
+  .svg-copy {
+    overflow: hidden;
+  }
   /* The svg object from the icons folder*/
   .svg-icon svg {
     max-width: 100% !important;
@@ -50,17 +53,14 @@ Sizing the SVG is tricky - wildly different sizes, ratios, and inline attr!
     color: #fff;
   }
   /* Removing the hover is a good way to hunt for path fill problems */
-  .svg-icon.active svg,
-  .svg-icon:hover svg * {
+  .svg-icon.active > .svg-copy svg,
+  .svg-icon:hover > .svg-copy svg * {
     fill: #fff !important;
   }
-
-  /* Searchable name */
   .icon-label {
-    display: block;
-    text-align: center;
-    z-index: 2;
+    max-width: 8.5em;
   }
+
   /* Hidden checkmark we use for sprite building */
   .js-spritecheck {
     position: absolute;
@@ -89,16 +89,25 @@ svg[width="1024"] {
 }
 
 
-a.active { color: black; font-weight: 700; }
-/*
 
-Helpers
-
-*/
-.p-2 { padding: 10px; }
-
-.truncate {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+/* Scrollspy */
+a.active {
+  color: black;
+  font-weight: 700;
 }
+
+/* Copy paste tools */
+.svg-copyer {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 23px;
+  height: 22px;
+  padding: 0;
+  border-radius: 3px;
+}
+  .svg-copyer svg.icon-paste {
+    width: 12px !important;
+    height: 12px !important;
+    fill: #555;
+  }

@@ -29,13 +29,27 @@ function findFiles($directory, $extensions = array()) {
         $files[$extension][] = $file;
 
         // wrap the icon and output with label
-        echo "<div class='svg-icon'>";
-          include $file;
-          echo "<div class='p-2'><div class='icon-label'><input class='js-spritecheck' type='checkbox'>";
-          // echo dirname($file, 1); // we could list the path
-          echo basename($file, '.svg').PHP_EOL;
-        echo "</div></div></div>\n\n";
-
+        ?>
+        <div class="card bg-light m-2">
+          <button class="svg-copyer">
+            <svg class="icon-paste" viewBox="0 0 16 16" aria-hidden="true">
+              <use xlink:href="#icon-paste"></use>
+            </svg>
+          </button>
+          <div class="svg-icon">
+            <div class="svg-copy">
+              <?php include $file; ?>
+            </div>
+          </div>
+          <div class='p-2'>
+            <div class='icon-label'>
+              <input class='js-spritecheck' type='checkbox'>
+              <?php //echo dirname($file, 1); // we could list the path ?>
+              <?php echo basename($file, '.svg').PHP_EOL; ?>
+            </div>
+          </div>
+        </div>
+      <?php
         $svg++;
       }
     }
