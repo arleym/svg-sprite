@@ -1,0 +1,86 @@
+/*
+
+  0. Base styles
+
+*/
+body {
+  font-family: monospace;
+  background-color: #f1f1f1;
+}
+
+/*
+
+1. Normal SVG Sizing Methods
+Sizing the SVG is tricky - wildly different sizes, ratios, and inline attr!
+
+*/
+.w-icons {
+  display: flex;
+  flex-wrap: wrap;
+}
+.svg-icon {
+  position: relative;
+  display: inline-block;
+  width: 10em;
+  float: left;
+  margin: 0.5em;
+  padding: 0.5em;
+  overflow: hidden;
+  background-color: #fff;
+  cursor: pointer;
+}
+  .svg-icon svg {
+    max-width: 100% !important;
+    max-height: calc(100% - 2.2em) !important;
+    all: unset !important;
+    width: 55px !important;
+    display: block !important;
+    margin: auto !important;
+  }
+
+  /* Hover styles - depending on the SVG markup, this may be stubborn! */
+  .svg-icon:hover {
+    background: #007700;
+    color: #fff;
+  }
+  .svg-icon:hover svg * {
+    fill: #fff !important;
+  }
+
+  .icon-label {
+    display: block;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+  }
+  .js-spritecheck {
+    position: absolute;
+    z-index: -1;
+  }
+
+/*
+  2. Zany SVG sizing hacks
+  In the collections I'm testing I'm seeing enough consistently... rude styles
+  to make it worth a couple hacks :)
+  Bad problems get bad solutions
+
+  Sometimes you have to go deeper too, if the glyph is a certain way try
+  `[width="123.547"] *`
+*/
+svg[height="1024"],
+svg[width="1024"] {
+  transform: scale(0.05) !important;
+}
+
+/*
+
+Helpers
+
+*/
+.p-2 { padding: 10px; }
+
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
