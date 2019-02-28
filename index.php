@@ -10,7 +10,7 @@
 <body class="position-relative" data-spy="scroll" data-target="#svg-nav" data-offset="0">
   <svg style="display:none">
     <defs>
-      <?php /* Yup, went there!
+      <?php /* Yup, went there! This is a sprite of SVGs in this app UI
 
         <svg class="icon-paste" viewBox="0 0 16 16" aria-hidden="true">
           <use xlink:href="#icon-paste"></use>
@@ -24,15 +24,16 @@
       </symbol>
     </defs>
   </svg>
+
   <div class="container-fluid">
     <div class="row">
       <div class="col-md-2 bg-light">
-        <div class="p-4" style="position: fixed;">
-          <!-- <h4>Sprite</h4>
-          <div class="mb-4">
-            <textarea id="svg-sprite" rows="10"></textarea>
-            <button class="btn js-copy btn-primary small d-block" data-clipboard-action="copy" data-clipboard-target="#svg-sprite">Copy</button>
-          </div> -->
+        <div class="svg-toolbar p-4">
+          <h4>Sprite</h4>
+          <div id="" class="mb-4 small">
+            <button id="svg-sprite-copyer" class="btn btn-primary btn-sm d-block mb-1" data-clipboard-action="copy" data-clipboard-target="#svg-shortlist">Cut All SVGs</button>
+            <div id="svg-shortlist" class="bg-white border border-primary"></div>
+          </div>
 
           <h4>Collections</h4>
           <ol id="svg-nav" class="navbar d-block m-0 p-0" role="navigation" aria-label="Main navigation">

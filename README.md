@@ -28,7 +28,12 @@ Looking to craft tight little SVG sprites with handy code comments to `<use>` ic
 
 
 ## TODO
-- JS gymnastics to add icons as sprites - have to filter the html()?
-  - Submit button to generate the sprite on demand vs. fuzzily on check
+- Reformat SVG into `svg defs symbol>g`: All icons in a form, check, Submit button to generate the sprite on demand with PHP vs. fuzzily on check with JS?
 - Add the aria stuff for the sprites in the comment block version with `<use>`
-- Accordion itself having a select-all for that collection
+- Accordion controls: a select-all/unselect-all for that collection
+- Play more with hover styles, e.g. doesn't work on material icons
+- svg-toolbar - pos: fixed only if not too tall
+- The pre we're collecting SVGs in: Hidden, accordion.
+- Styles for long folder names in nav... wrapper overflow-x scroll, right align
+- Clipboard tool tips like on clipboard.js
+- Jquery :contains to remove the <div></div> from the clipboard of the sprite thing

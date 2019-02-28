@@ -35,29 +35,37 @@ $(function() {
   // Selectable icon
   $(".svg-icon").click(function() {
     $(this).toggleClass("active");
+    $(this).find('.svg-copy').clone().appendTo("#svg-shortlist");
   });
 
   // Clipboard usage - uses 3rd party
   // Copy the sprite textarea contents
   new ClipboardJS('.js-copy');
 
-  // Copy the SVG code purely
-  var clipboard = new ClipboardJS('.svg-copyer', {
+  // Copy single SVG code purely
+  new ClipboardJS('.svg-copyer', {
     text: function(trigger) {
       return $(trigger).siblings('.svg-icon').find('.svg-copy').html();
     }
   });
-  // // Debugging tools to uncomment:
-  // clipboard.on('success', function(e) {
-  //   console.info('Action:', e.action);
-  //   console.info('Text:', e.text);
-  //   console.info('Trigger:', e.trigger);
-  //   e.clearSelection();
-  // });
-  // clipboard.on('error', function(e) {
-  //   console.error('Action:', e.action);
-  //   console.error('Trigger:', e.trigger);
-  // });
 
+  // Copy SVGs out of div collecting them
+  var clipboard = new ClipboardJS('#svg-sprite-copyer', {
+    text: function(trigger) {
+      return $(trigger).siblings('#svg-shortlist').html();
+    }
+  });
+  // // Debugging tools to uncomment:
+  clipboard.on('success', function(e) {
+    console.info('Action:', e.action);
+    console.info('Text:', e.text);
+    console.info('Trigger:', e.trigger);
+    $('#svg-shortlist').empty();
+    e.clearSelection();
+  });
+  clipboard.on('error', function(e) {
+    console.error('Action:', e.action);
+    console.error('Trigger:', e.trigger);
+  });
 
 });
