@@ -18,10 +18,14 @@ function findFiles($directory, $extensions = array()) {
   foreach($directories as $directory) {
 
     // Folder title plus a flexbox wrapper for each icon
-    echo "<div id='svg-collection-" . $i . "' class='js-collection position-relative'><a class='svg-collection-title p-2 d-block card' data-toggle='collapse' href='#collapse" . $i . "' role='button' aria-expanded='false' aria-controls='collapse" . $i . "'>";
-    echo "<h3 class='js-svg-collection h4'>" . $directory . "</h3></a><section class='w-icons collapse' id='collapse" . $i . "'>";
+    ?>
+    <div id="svg-collection-<?php echo $i; ?>" class="js-collection position-relative">
+      <a class="svg-collection-title p-2 d-block card" data-toggle="collapse" href="#collapse<?php echo $i; ?>" role="button" aria-expanded="false" aria-controls="collapse<?php echo$i; ?>">
+        <h3 class="js-svg-collection h4"><?php echo $directory; ?></h3>
+      </a>
+      <section class="w-icons collapse" id="collapse<?php echo $i; ?>">
 
-    foreach($extensions as $extension) {
+    <?php foreach($extensions as $extension) {
 
       // a SVG counter variable
       $svg = 0;
@@ -30,12 +34,21 @@ function findFiles($directory, $extensions = array()) {
 
         // wrap the icon and output with label
         ?>
-        <div class="card bg-light m-2">
-          <button class="svg-copyer">
-            <svg class="icon-paste" viewBox="0 0 16 16" aria-hidden="true">
-              <use xlink:href="#icon-paste"></use>
-            </svg>
-          </button>
+        <div class="card bg-light m-2 pb-5">
+          <!-- <div class="w-icon-ui"> -->
+            <a href="<?php echo $file; ?>" download class="btn-sm btn btn-light icon-ui-tiny">
+              <svg class="icon-download" viewBox="0 0 512 512" aria-hidden="true">
+                <use xlink:href="#icon-download"></use>
+              </svg>
+              Dnld
+            </a>
+            <button class="btn-sm btn btn-light icon-ui-tiny svg-copyer">
+              <svg class="icon-paste" viewBox="0 0 16 16" aria-hidden="true">
+                <use xlink:href="#icon-paste"></use>
+              </svg>
+              Copy
+            </button>
+          <!-- </div> -->
           <div class="svg-icon">
             <div class="svg-copy">
               <?php include $file; ?>
@@ -44,7 +57,6 @@ function findFiles($directory, $extensions = array()) {
           <div class='p-2'>
             <div class='icon-label'>
               <input class='js-spritecheck' type='checkbox'>
-              <?php //echo dirname($file, 1); // we could list the path ?>
               <?php echo basename($file, '.svg').PHP_EOL; ?>
             </div>
           </div>

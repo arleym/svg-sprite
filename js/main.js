@@ -52,7 +52,7 @@ $(function() {
   // Copy SVGs out of div collecting them
   var clipboard = new ClipboardJS('#svg-sprite-copyer', {
     text: function(trigger) {
-      return $(trigger).siblings('#svg-shortlist').html();
+      return $(trigger).siblings('#svg-shortlist').find('.svg-copy').html();
     }
   });
   // // Debugging tools to uncomment:

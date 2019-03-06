@@ -10,16 +10,27 @@
 <body class="position-relative" data-spy="scroll" data-target="#svg-nav" data-offset="0">
   <svg style="display:none">
     <defs>
-      <?php /* Yup, went there! This is a sprite of SVGs in this app UI
-
-        <svg class="icon-paste" viewBox="0 0 16 16" aria-hidden="true">
-          <use xlink:href="#icon-paste"></use>
-        </svg>
-      */?>
       <symbol>
+        <?php /* Yup, went there! This is a sprite of SVGs in this app UI
+
+          <svg class="icon-paste" viewBox="0 0 16 16" aria-hidden="true">
+            <use xlink:href="#icon-paste"></use>
+          </svg>
+        */?>
         <g id="icon-paste">
           <path d="M14.5 2h-4.5c0-1.105-0.895-2-2-2s-2 0.895-2 2h-4.5c-0.276 0-0.5 0.224-0.5 0.5v13c0 0.276 0.224 0.5 0.5 0.5h13c0.276 0 0.5-0.224 0.5-0.5v-13c0-0.276-0.224-0.5-0.5-0.5zM8 1c0.552 0 1 0.448 1 1s-0.448 1-1 1c-0.552 0-1-0.448-1-1s0.448-1 1-1zM14 15h-12v-12h2v1.5c0 0.276 0.224 0.5 0.5 0.5h7c0.276 0 0.5-0.224 0.5-0.5v-1.5h2v12z"></path>
           <path d="M7 13.414l-3.207-3.707 0.914-0.914 2.293 1.793 4.293-3.793 0.914 0.914z"></path>
+        </g>
+      </symbol>
+      <?php /*
+
+        <svg class="icon-download" viewBox="0 0 512 512" aria-hidden="true">
+          <use xlink:href="#icon-download"></use>
+        </svg>
+      */?>
+      <symbol>
+        <g id="icon-download">
+          <path d="M216 0h80c13.3 0 24 10.7 24 24v168h87.7c17.8 0 26.7 21.5 14.1 34.1L269.7 378.3c-7.5 7.5-19.8 7.5-27.3 0L90.1 226.1c-12.6-12.6-3.7-34.1 14.1-34.1H192V24c0-13.3 10.7-24 24-24zm296 376v112c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24V376c0-13.3 10.7-24 24-24h146.7l49 49c20.1 20.1 52.5 20.1 72.6 0l49-49H488c13.3 0 24 10.7 24 24zm-124 88c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20zm64 0c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20z"></path>
         </g>
       </symbol>
     </defs>
@@ -32,7 +43,9 @@
           <h4>Sprite</h4>
           <div id="" class="mb-4 small">
             <button id="svg-sprite-copyer" class="btn btn-primary btn-sm d-block mb-1" data-clipboard-action="copy" data-clipboard-target="#svg-shortlist">Cut All SVGs</button>
-            <div id="svg-shortlist" class="bg-white border border-primary"></div>
+            <div id="svg-shortlist" class="bg-white border border-primary">
+              <div class="svg-copy"></div>
+            </div>
           </div>
 
           <h4>Collections</h4>

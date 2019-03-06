@@ -99,17 +99,18 @@ a.active {
 }
 
 /* Copy paste tools */
-.svg-copyer {
+.w-icon-ui {
   position: absolute;
   bottom: 2px;
-  right: 2px;
-  width: 23px;
-  height: 22px;
-  padding: 0;
+  width: 100%;
+  font-size: 9px;
+}
+.icon-ui-tiny {
+  padding: 5px;
   border-radius: 3px;
   cursor: pointer;
 }
-  .svg-copyer svg.icon-paste {
+  .icon-ui-tiny svg {
     width: 12px !important;
     height: 12px !important;
     fill: #555;

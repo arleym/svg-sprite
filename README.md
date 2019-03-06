@@ -37,3 +37,7 @@ Looking to craft tight little SVG sprites with handy code comments to `<use>` ic
 - Styles for long folder names in nav... wrapper overflow-x scroll, right align
 - Clipboard tool tips like on clipboard.js
 - Jquery :contains to remove the <div></div> from the clipboard of the sprite thing
+- After cutting all the sprites uncheck all the checked
+- Add label to copy button
+- Add download button, download the SVG as a file! 
+- Sprite clear selection button: empty textarea, uncheck all the things
