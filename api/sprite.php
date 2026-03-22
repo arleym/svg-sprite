@@ -124,9 +124,30 @@ foreach ($input['files'] as $relativePath) {
         continue;
     }
 
+    // --- SVG Cleanup (Phase 4) ---
     // Remove hardcoded fill attributes (so icons inherit currentColor)
-    // But keep fill="none" and fill="currentColor" as they're intentional
+    // Keep fill="none" and fill="currentColor" as they're intentional
     $cleanedContent = preg_replace('/\s+fill="(?!none|currentColor)[^"]*"/', '', $innerContent);
+    // Strip width/height on inner elements that override viewBox scaling
+    $cleanedContent = preg_replace('/\s+(width|height)="[^"]*"/', '', $cleanedContent);
+    // Strip editor metadata (Sketch, Illustrator, Inkscape)
+    $cleanedContent = preg_replace('/<\?xml[^?]*\?>/', '', $cleanedContent);
+    $cleanedContent = preg_replace('/\s+xmlns:sketch="[^"]*"/', '', $cleanedContent);
+    $cleanedContent = preg_replace('/\s+xmlns:dc="[^"]*"/', '', $cleanedContent);
+    $cleanedContent = preg_replace('/\s+xmlns:cc="[^"]*"/', '', $cleanedContent);
+    $cleanedContent = preg_replace('/\s+xmlns:rdf="[^"]*"/', '', $cleanedContent);
+    $cleanedContent = preg_replace('/\s+xmlns:sodipodi="[^"]*"/', '', $cleanedContent);
+    $cleanedContent = preg_replace('/\s+xmlns:inkscape="[^"]*"/', '', $cleanedContent);
+    $cleanedContent = preg_replace('/\s+sketch:type="[^"]*"/', '', $cleanedContent);
+    $cleanedContent = preg_replace('/\s+inkscape:[a-z-]+="[^"]*"/', '', $cleanedContent);
+    $cleanedContent = preg_replace('/\s+sodipodi:[a-z-]+="[^"]*"/', '', $cleanedContent);
+    // Strip data- attributes from editors
+    $cleanedContent = preg_replace('/\s+data-name="[^"]*"/', '', $cleanedContent);
+    // Strip empty <g> wrappers with only id/class (common in Illustrator exports)
+    $cleanedContent = preg_replace('/<g\s*>\s*<\/g>/', '', $cleanedContent);
+    // Collapse multiple whitespace lines
+    $cleanedContent = preg_replace('/\n\s*\n/', "\n", $cleanedContent);
+    $cleanedContent = trim($cleanedContent);
 
     // Build the symbol with usage comment
     $useSnippet = "<svg><use href=\"#$id\"></use></svg>";

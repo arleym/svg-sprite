@@ -25,6 +25,10 @@
 
     --font-sans: system-ui, -apple-system, 'Segoe UI', sans-serif;
     --font-mono: 'SF Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+
+    /* Preview controls — overridden by JS */
+    --icon-display-size: 48px;
+    --icon-display-color: currentColor;
 }
 
 /* --- Reset & Base --- */
@@ -477,8 +481,10 @@ ul {
 }
 
 .icon-preview svg {
-    width: 48px;
-    height: 48px;
+    width: var(--icon-display-size);
+    height: var(--icon-display-size);
+    color: var(--icon-display-color);
+    transition: width 0.15s, height 0.15s, color 0.15s;
 }
 
 /* Icon info */
@@ -605,6 +611,115 @@ ul {
 
 .collection.hidden {
     display: none;
+}
+
+/* --- Preview Toolbar --- */
+.preview-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 0.6rem 1rem;
+    margin-bottom: 1rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius);
+}
+
+.toolbar-group {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.toolbar-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-text-muted);
+}
+
+.toolbar-value {
+    font-size: 0.75rem;
+    font-family: var(--font-mono);
+    color: var(--color-text-muted);
+    min-width: 3em;
+}
+
+input[type="range"] {
+    width: 100px;
+    accent-color: var(--color-primary);
+    cursor: pointer;
+}
+
+input[type="color"] {
+    width: 28px;
+    height: 28px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    padding: 1px;
+    cursor: pointer;
+    background: none;
+}
+
+/* --- Select All Button in Collection Header --- */
+.collection-header .btn-select-all {
+    font-size: 0.7rem;
+    margin-left: 0.5rem;
+    opacity: 0;
+    transition: opacity 0.15s;
+}
+
+.collection-header:hover .btn-select-all {
+    opacity: 1;
+}
+
+/* --- Keyboard Focus --- */
+.icon-card.focused {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 1px;
+    z-index: 1;
+}
+
+/* --- Dark Preview Mode --- */
+body.dark-preview .icon-grid {
+    background: #1a1a1a;
+    border-radius: 0 0 var(--radius) var(--radius);
+}
+
+body.dark-preview .icon-card {
+    background: #2a2a2a;
+    border-color: #333;
+}
+
+body.dark-preview .icon-card:hover {
+    border-color: #555;
+}
+
+body.dark-preview .icon-card.selected {
+    background: #1a3d1a;
+    border-color: var(--color-selected);
+}
+
+body.dark-preview .icon-preview svg {
+    color: #e0e0e0;
+}
+
+body.dark-preview .icon-label {
+    color: #999;
+}
+
+body.dark-preview .icon-card.selected .icon-info {
+    color: #66bb66;
+}
+
+body.dark-preview .preview-toolbar {
+    background: #2a2a2a;
+    border-color: #444;
+}
+
+body.dark-preview .toolbar-label,
+body.dark-preview .toolbar-value {
+    color: #aaa;
 }
 
 /* --- Toast Notification --- */

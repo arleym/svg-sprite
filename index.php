@@ -77,6 +77,22 @@
                     <button class="btn btn-ghost" id="btn-collapse-all">Collapse all</button>
                 </div>
             </header>
+
+            <div class="preview-toolbar">
+                <div class="toolbar-group">
+                    <label class="toolbar-label" for="icon-size-slider">Size</label>
+                    <input type="range" id="icon-size-slider" min="16" max="64" value="48" step="4">
+                    <span class="toolbar-value" id="icon-size-value">48px</span>
+                </div>
+                <div class="toolbar-group">
+                    <label class="toolbar-label" for="icon-color-picker">Color</label>
+                    <input type="color" id="icon-color-picker" value="#222222">
+                    <button class="btn btn-ghost btn-reset-color" id="btn-reset-color" title="Reset to default">Reset</button>
+                </div>
+                <div class="toolbar-group">
+                    <button class="btn btn-ghost" id="btn-toggle-theme" title="Toggle dark/light preview">Dark mode</button>
+                </div>
+            </div>
             <div id="icon-collections">
                 <?php include('list-svgs.php'); ?>
             </div>

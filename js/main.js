@@ -6,15 +6,20 @@
 // --- State ---
 let spriteData = null;
 let debounceTimer = null;
+const STORAGE_KEY = 'svg-sprite-sprint-selection';
 
 // --- Init ---
 document.addEventListener('DOMContentLoaded', () => {
     setupCollectionNav();
     setupAccordionControls();
     setupIconSelection();
+    setupSelectAll();
     setupTabs();
     setupOutputActions();
     setupSearch();
+    setupKeyboardNav();
+    setupPreviewToolbar();
+    restoreSelection();
 });
 
 // --- Collection Nav ---
@@ -70,7 +75,6 @@ function setupAccordionControls() {
 
 // --- Icon Selection ---
 function setupIconSelection() {
-    // Event delegation on the collections container
     const container = document.getElementById('icon-collections');
     if (!container) return;
 
@@ -82,6 +86,7 @@ function setupIconSelection() {
         if (e.target.closest('.icon-actions') || e.target.closest('.icon-use-snippet')) return;
 
         card.classList.toggle('selected');
+        saveSelection();
         debouncedUpdateSprite();
     });
 
@@ -113,13 +118,95 @@ function setupIconSelection() {
     });
 }
 
+// --- Select All / Deselect All per Collection ---
+function setupSelectAll() {
+    document.addEventListener('click', (e) => {
+        const btn = e.target.closest('.btn-select-all');
+        if (!btn) return;
+
+        e.stopPropagation(); // Don't toggle the <details>
+
+        const collection = btn.closest('.collection');
+        if (!collection) return;
+
+        const cards = collection.querySelectorAll('.icon-card:not(.hidden)');
+        const allSelected = Array.from(cards).every((c) => c.classList.contains('selected'));
+
+        cards.forEach((card) => {
+            card.classList.toggle('selected', !allSelected);
+        });
+
+        btn.textContent = allSelected ? 'Select all' : 'Deselect all';
+        saveSelection();
+        debouncedUpdateSprite();
+    });
+}
+
+// --- Keyboard Navigation ---
+function setupKeyboardNav() {
+    document.addEventListener('keydown', (e) => {
+        // Don't hijack if user is typing in search
+        if (e.target.matches('input, textarea, select')) return;
+
+        const focused = document.querySelector('.icon-card.focused');
+
+        if (e.key === ' ' && focused) {
+            e.preventDefault();
+            focused.classList.toggle('selected');
+            saveSelection();
+            debouncedUpdateSprite();
+            return;
+        }
+
+        if (!['ArrowRight', 'ArrowLeft', 'ArrowDown', 'ArrowUp'].includes(e.key)) return;
+        e.preventDefault();
+
+        const allCards = Array.from(document.querySelectorAll('.icon-card:not(.hidden)'));
+        if (allCards.length === 0) return;
+
+        let currentIndex = focused ? allCards.indexOf(focused) : -1;
+
+        // Figure out grid columns for up/down navigation
+        const grid = allCards[0]?.closest('.icon-grid');
+        let cols = 1;
+        if (grid) {
+            const gridWidth = grid.offsetWidth;
+            const cardWidth = allCards[0].offsetWidth + 8; // gap estimate
+            cols = Math.max(1, Math.floor(gridWidth / cardWidth));
+        }
+
+        let nextIndex;
+        switch (e.key) {
+            case 'ArrowRight': nextIndex = currentIndex + 1; break;
+            case 'ArrowLeft':  nextIndex = currentIndex - 1; break;
+            case 'ArrowDown':  nextIndex = currentIndex + cols; break;
+            case 'ArrowUp':    nextIndex = currentIndex - cols; break;
+        }
+
+        if (nextIndex < 0) nextIndex = 0;
+        if (nextIndex >= allCards.length) nextIndex = allCards.length - 1;
+
+        if (focused) focused.classList.remove('focused');
+        allCards[nextIndex].classList.add('focused');
+        allCards[nextIndex].scrollIntoView({ block: 'nearest' });
+
+        // Make sure the parent <details> is open
+        const details = allCards[nextIndex].closest('details');
+        if (details && !details.open) details.open = true;
+    });
+
+    // Remove focus ring on mouse click
+    document.addEventListener('mousedown', () => {
+        document.querySelector('.icon-card.focused')?.classList.remove('focused');
+    });
+}
+
 // --- Tabs ---
 function setupTabs() {
     const tabs = document.querySelectorAll('.tab');
 
     tabs.forEach((tab) => {
         tab.addEventListener('click', () => {
-            // Deactivate all
             tabs.forEach((t) => {
                 t.classList.remove('active');
                 t.setAttribute('aria-selected', 'false');
@@ -130,7 +217,6 @@ function setupTabs() {
                 p.hidden = true;
             });
 
-            // Activate clicked
             tab.classList.add('active');
             tab.setAttribute('aria-selected', 'true');
 
@@ -162,8 +248,13 @@ function setupOutputActions() {
         document.querySelectorAll('.icon-card.selected').forEach((card) => {
             card.classList.remove('selected');
         });
+        // Reset select-all button labels
+        document.querySelectorAll('.btn-select-all').forEach((btn) => {
+            btn.textContent = 'Select all';
+        });
         spriteData = null;
         updateOutputPanel(null);
+        clearSelection();
     });
 }
 
@@ -194,6 +285,87 @@ function setupSearch() {
     });
 }
 
+// --- Preview Toolbar (Phase 7) ---
+function setupPreviewToolbar() {
+    // Size slider
+    const sizeSlider = document.getElementById('icon-size-slider');
+    const sizeValue = document.getElementById('icon-size-value');
+
+    sizeSlider?.addEventListener('input', () => {
+        const size = sizeSlider.value;
+        sizeValue.textContent = size + 'px';
+        document.documentElement.style.setProperty('--icon-display-size', size + 'px');
+    });
+
+    // Color picker
+    const colorPicker = document.getElementById('icon-color-picker');
+    colorPicker?.addEventListener('input', () => {
+        document.documentElement.style.setProperty('--icon-display-color', colorPicker.value);
+    });
+
+    // Reset color
+    document.getElementById('btn-reset-color')?.addEventListener('click', () => {
+        colorPicker.value = '#222222';
+        document.documentElement.style.removeProperty('--icon-display-color');
+    });
+
+    // Dark/light toggle
+    const themeBtn = document.getElementById('btn-toggle-theme');
+    themeBtn?.addEventListener('click', () => {
+        const isDark = document.body.classList.toggle('dark-preview');
+        themeBtn.textContent = isDark ? 'Light mode' : 'Dark mode';
+    });
+}
+
+// --- LocalStorage Persistence (Phase 6) ---
+function saveSelection() {
+    const selected = document.querySelectorAll('.icon-card.selected');
+    const paths = Array.from(selected).map((card) => card.dataset.filepath);
+    try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(paths));
+    } catch {
+        // Storage full or unavailable — silently ignore
+    }
+}
+
+function clearSelection() {
+    try {
+        localStorage.removeItem(STORAGE_KEY);
+    } catch {
+        // ignore
+    }
+}
+
+function restoreSelection() {
+    let paths;
+    try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (!stored) return;
+        paths = JSON.parse(stored);
+    } catch {
+        return;
+    }
+
+    if (!Array.isArray(paths) || paths.length === 0) return;
+
+    const pathSet = new Set(paths);
+    document.querySelectorAll('.icon-card').forEach((card) => {
+        if (pathSet.has(card.dataset.filepath)) {
+            card.classList.add('selected');
+        }
+    });
+
+    // Update select-all button labels
+    document.querySelectorAll('.collection').forEach((col) => {
+        const cards = col.querySelectorAll('.icon-card');
+        const allSelected = cards.length > 0 && Array.from(cards).every((c) => c.classList.contains('selected'));
+        const btn = col.querySelector('.btn-select-all');
+        if (btn && allSelected) btn.textContent = 'Deselect all';
+    });
+
+    debouncedUpdateSprite();
+}
+
 // --- Sprite Generation ---
 function debouncedUpdateSprite() {
     clearTimeout(debounceTimer);
@@ -204,7 +376,6 @@ async function updateSprite() {
     const selected = document.querySelectorAll('.icon-card.selected');
     const count = selected.length;
 
-    // Update count
     document.querySelector('.selection-count').textContent =
         `${count} icon${count !== 1 ? 's' : ''} selected`;
 
@@ -258,7 +429,6 @@ function updateOutputPanel(data) {
     clearBtn.disabled = false;
 
     // --- Preview tab ---
-    // Inject sprite into a hidden container so <use> references work
     let hiddenSprite = document.getElementById('hidden-sprite-container');
     if (!hiddenSprite) {
         hiddenSprite = document.createElement('div');
@@ -301,7 +471,6 @@ async function copyToClipboard(text) {
     try {
         await navigator.clipboard.writeText(text);
     } catch {
-        // Fallback for HTTP / older browsers
         const ta = document.createElement('textarea');
         ta.value = text;
         ta.style.cssText = 'position:fixed;left:-9999px;top:-9999px';

@@ -1,43 +1,63 @@
 
 # SVG Sprite Sprint
 
-Looking to craft tight little SVG sprites with handy code comments to `<use>` icons as a system for a website.
+A UI for building performant, accessible SVG sprites. Dump icon folders in, pick the ones you want, get a production-ready `<symbol>` sprite with copy/pastable `<use>` snippets.
 
-## Problems this will hopefully solve
+## Why
+
 - Icon fonts are a bad way to icon
-- We want better control over style, colors
-- Improve Accessibility
-- Icons can be difficult or messy to search 
-
-## Goals
-- Be able to dump SVG directories and collections into one folder, as messy as you please
-- List all SVGs in a single document, with names for findability
-- Click the icon to start building a sprite
-- Cookies to remember which collections you're after
-- A quick way to add entire collections
+- SVG sprites give full control over style, color, and size
+- Accessible by default (`<title>`, `aria-label`, `role="img"`)
+- Icons can be difficult or messy to search — this makes it easy
 
 ## Requirements
-- A way to render PHP templates locally (like a MAMP/WAMP/LAMP/XAMPP) or a server
-- Access to the interet, or grad bootstrap assets if you want the layout / accordions etc.
-- To reset unpredictable inline attr on the SVG files we are using the CSS `all: unset;` which isn't supported by all browsers https://caniuse.com/#search=all
+
+- PHP 7+ (uses `DOMDocument` for SVG parsing)
+- No build step, no npm, no dependencies — just PHP and vanilla JS
 
 ## Usage
-- Dump all of your icons into the `icons` dir
-- Visit index.php - requires a PHP tool like MAMP
-- If you are building a long-standing icon library you may want to go as far as forking this repo and removing the icons/* from the gitignore
 
+1. Drop SVG folders into the `icons/` directory — nest them however you want
+2. Serve with any PHP server
+3. Click icons to select them
+4. Copy the sprite, download the `.svg`, or grab individual `<use>` snippets
 
-## TODO
-- Reformat SVG into `svg defs symbol>g`: All icons in a form, check, Submit button to generate the sprite on demand with PHP vs. fuzzily on check with JS?
-- Add the aria stuff for the sprites in the comment block version with `<use>`
-- Accordion controls: a select-all/unselect-all for that collection
-- Play more with hover styles, e.g. doesn't work on material icons
-- svg-toolbar - pos: fixed only if not too tall
-- The pre we're collecting SVGs in: Hidden, accordion.
-- Styles for long folder names in nav... wrapper overflow-x scroll, right align
-- Clipboard tool tips like on clipboard.js
-- Jquery :contains to remove the <div></div> from the clipboard of the sprite thing
-- After cutting all the sprites uncheck all the checked
-- Add label to copy button
-- Add download button, download the SVG as a file! 
-- Sprite clear selection button: empty textarea, uncheck all the things
+## Local Development
+
+```bash
+php -S localhost:8000
+```
+
+Then open http://localhost:8000
+
+## Deploy to Dreamhost (or any shared host)
+
+SFTP the project to your server. That's it — no build step.
+
+```
+Upload these:
+  index.php
+  list-svgs.php
+  api/sprite.php
+  css/styles.css
+  js/main.js
+  icons/          ← your SVG collections
+```
+
+The `icons/` directory can be managed directly on the server via SFTP — drop folders in, refresh the page.
+
+## Project Structure
+
+```
+index.php          Main page — layout, sidebar, tabbed output panel
+list-svgs.php      PHP recursive scanner — finds SVGs, renders icon grid
+api/sprite.php     POST endpoint — generates <symbol> sprite from selections
+css/styles.css     All styles — CSS Grid, custom properties, no frameworks
+js/main.js         All JS — vanilla ES modules, no dependencies
+icons/             Your SVG collections (gitignored)
+todo.md            Roadmap and feature backlog
+```
+
+## See Also
+
+- [todo.md](todo.md) for the full roadmap

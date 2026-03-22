@@ -35,6 +35,7 @@ function findFiles($directory, $extensions = []) {
             <summary class="collection-header">
                 <h3><?php echo htmlspecialchars($displayName); ?></h3>
                 <span class="collection-count"><?php echo $count; ?> SVGs</span>
+                <button type="button" class="btn btn-ghost btn-select-all" title="Select all in this collection">Select all</button>
             </summary>
             <div class="icon-grid">
                 <?php foreach ($svgFiles as $file):

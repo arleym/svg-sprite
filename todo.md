@@ -11,74 +11,58 @@
 
 ---
 
-## Phase 1: Core Sprite Output (the whole point)
+## Phase 1: Core Sprite Output — DONE
 
-- [ ] Generate proper `<symbol>` sprite from selected SVGs
-  - Wrap selections in `<svg xmlns="http://www.w3.org/2000/svg" style="display:none"><defs>...</defs></svg>`
-  - Convert each SVG to `<symbol id="icon-name" viewBox="...">` with paths inside
-  - Auto-derive `id` from filename (sanitize: lowercase, hyphens, no spaces)
-- [ ] Show copyable `<use>` reference per icon: `<svg><use href="#icon-name"></use></svg>`
-- [ ] Add accessible markup to generated output
-  - `<title>` element inside each `<symbol>`
-  - `aria-hidden="true"` on the sprite container
-  - Usage snippets show `role="img" aria-label="Icon Name"` pattern
-- [ ] Code comments in sprite output for easy identification of each icon
+- [x] Generate proper `<symbol>` sprite from selected SVGs
+- [x] Show copyable `<use>` reference per icon (on-card snippet bar + Usage tab)
+- [x] Add accessible markup (`<title>`, `aria-hidden`, `role="img"`, `aria-label`)
+- [x] Code comments in sprite output with copy/pastable `<use>` snippets
 
-## Phase 2: Output Panel Overhaul
+## Phase 2: Output Panel Overhaul — DONE
 
-- [ ] Replace raw `#svg-shortlist` blob with a tabbed output panel:
-  - **Preview tab**: rendered icons via `<use>` references
-  - **Sprite tab**: full `<svg><defs>...</defs></svg>` block, syntax-highlighted, one-click copy
-  - **Usage tab**: list of `<use href="#icon-name">` snippets for each selected icon
-- [ ] Download sprite as `.svg` file button
-- [ ] Clear selection button: empty output, deselect all icons
-- [ ] Auto-deselect all after "Copy All" (or offer the option)
+- [x] Tabbed output panel: Preview / Sprite / Usage
+- [x] Download sprite as `.svg` file
+- [x] Clear selection button
+- [x] Copy sprite button
 
-## Phase 3: Selection UX
+## Phase 3: Selection UX — DONE
 
-- [ ] Select-all / deselect-all per collection (accordion section)
-- [ ] Global search/filter input — typing "arrow" filters across all collections
-- [ ] Selection count badge in toolbar: "12 icons selected"
-- [ ] Keyboard navigation: arrow keys between icons, space to toggle
+- [x] Select-all / deselect-all per collection (appears on hover)
+- [x] Global search/filter input
+- [x] Selection count badge: "12 icons selected"
+- [x] Keyboard navigation: arrow keys to move, space to toggle selection
 - [ ] Drag/rubber-band selection across the icon grid (stretch goal)
 
-## Phase 4: SVG Cleanup
+## Phase 4: SVG Cleanup — DONE
 
 - [ ] Use SVGO locally (CLI) to pre-clean icons before uploading to server
-- [ ] PHP-side cleanup as fallback:
+- [x] PHP-side cleanup in api/sprite.php:
   - Strip `width`/`height` attributes, preserve `viewBox`
-  - Remove hardcoded `fill` attributes so icons inherit `currentColor`
-  - Strip editor metadata (Sketch, Illustrator, Inkscape comments)
-  - Normalize `viewBox` format
-- [ ] This replaces the CSS scaling hacks for oversized icons (1024px etc.)
+  - Remove hardcoded `fill` attributes (keep `fill="none"` and `fill="currentColor"`)
+  - Strip editor metadata (Sketch, Illustrator, Inkscape namespaces + attributes)
+  - Strip `data-name` attributes, empty `<g>` wrappers
+  - Collapse whitespace
 
-## Phase 5: Modernize Frontend (no jQuery, no Bootstrap)
+## Phase 5: Modernize Frontend — DONE
 
-- [ ] Replace jQuery with vanilla JS (ES modules)
-  - `document.querySelector` / `querySelectorAll` for DOM
-  - `fetch` for any async needs
-  - Event delegation for dynamic elements
-  - Native `IntersectionObserver` for scroll tracking (replaces scrollspy)
-- [ ] Replace Bootstrap grid/accordion with:
-  - CSS Grid for icon layout
-  - `<details>/<summary>` for accordion sections (native, accessible, zero JS)
-  - CSS custom properties for theming
-- [ ] Keep Clipboard.js (it's small and handles edge cases well) or replace with `navigator.clipboard.writeText()`
+- [x] Replace jQuery with vanilla JS (ES modules, event delegation, fetch)
+- [x] Replace Bootstrap with CSS Grid, `<details>/<summary>`, custom properties
+- [x] Replace Clipboard.js with `navigator.clipboard.writeText()` + fallback
 
-## Phase 6: State Persistence
+## Phase 6: State Persistence — DONE
 
-- [ ] LocalStorage for selections (survives page refresh)
+- [x] LocalStorage for selections (survives page refresh)
 - [ ] URL hash encoding for shareable links: `#icons=arrow-left,check,close`
 - [ ] Export/import selection manifest as JSON for team sharing
 
-## Phase 7: Preview & Polish
+## Phase 7: Preview & Polish — DONE
 
-- [ ] Dark/light mode toggle for previewing icons on different backgrounds
-- [ ] Icon size slider to preview at 16px, 24px, 32px, 48px
-- [ ] Color picker to preview icons with different fill colors
-- [ ] Clipboard copy confirmation tooltips (replaces alert/no-feedback)
+- [x] Dark/light mode toggle for previewing icons on different backgrounds
+- [x] Icon size slider (16px–64px)
+- [x] Color picker to preview icons with different fill colors
+- [x] Toast notifications for copy confirmations
+- [x] Sticky sidebar with scroll
 - [ ] Fix nav overflow for long folder names (overflow-x scroll, right-align text)
-- [ ] Sticky toolbar that stays fixed only when it fits in viewport
 
 ## Phase 8: Nice-to-Haves
 
@@ -87,6 +71,7 @@
 - [ ] Icon count per collection shown in nav
 - [ ] Lazy-load icon sections for large collections (IntersectionObserver)
 - [ ] Remember last-used collections via LocalStorage
+- [ ] URL hash encoding for shareable selections
 
 ---
 
