@@ -1,117 +1,657 @@
-/*
+/* ===========================
+   SVG Sprite Sprint
+   Modern CSS — no frameworks
+   =========================== */
 
-  0. Base styles
+/* --- Custom Properties --- */
+:root {
+    --color-bg: #f1f1f1;
+    --color-surface: #ffffff;
+    --color-surface-dim: #f7f7f7;
+    --color-primary: #0055cc;
+    --color-primary-hover: #003d99;
+    --color-primary-text: #ffffff;
+    --color-selected: #007700;
+    --color-selected-light: #e6f4e6;
+    --color-text: #222222;
+    --color-text-muted: #777777;
+    --color-border: #ddd;
+    --color-border-light: #eee;
 
-*/
+    --sidebar-width: 340px;
+    --icon-card-min: 110px;
+    --radius: 6px;
+    --radius-sm: 4px;
+
+    --font-sans: system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --font-mono: 'SF Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+}
+
+/* --- Reset & Base --- */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
 body {
-  font-family: monospace;
-  background-color: #f1f1f1;
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: 14px;
+    color: var(--color-text);
+    background: var(--color-bg);
+    line-height: 1.4;
 }
 
-/*
-
-1. Normal SVG Sizing Methods
-Sizing the SVG is tricky - wildly different sizes, ratios, and inline attr!
-
-*/
-
-/* Wraps a collection */
-.w-icons {
-  display: flex;
-  flex-wrap: wrap;
+h1, h2, h3, h4 {
+    margin: 0;
 }
-/* SVG item */
-.svg-icon {
-  position: relative;
-  display: inline-block;
-  max-width: 100%;
-  width: 10em;
-  margin: 0.5em;
-  padding: 0.5em;
-  background-color: #fff;
-  cursor: pointer;
+
+button {
+    font: inherit;
+    cursor: pointer;
 }
-  /* wraps SVG w-svg */
-  .svg-copy {
+
+a {
+    color: var(--color-primary);
+    text-decoration: none;
+}
+
+ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* --- App Layout --- */
+.app-layout {
+    display: grid;
+    grid-template-columns: var(--sidebar-width) 1fr;
+    min-height: 100vh;
+}
+
+/* --- Sidebar --- */
+.sidebar {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    background: var(--color-surface);
+    border-right: 1px solid var(--color-border);
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-heading {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-muted);
+    padding: 1rem 1rem 0.5rem;
+}
+
+.sidebar-output {
+    border-bottom: 1px solid var(--color-border);
+}
+
+.sidebar-nav {
+    flex: 1;
+    overflow-y: auto;
+}
+
+/* --- Tabs --- */
+.tab-bar {
+    display: flex;
+    border-bottom: 1px solid var(--color-border);
+    padding: 0 1rem;
+}
+
+.tab {
+    padding: 0.5rem 0.75rem;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    transition: color 0.15s, border-color 0.15s;
+}
+
+.tab:hover {
+    color: var(--color-text);
+}
+
+.tab.active {
+    color: var(--color-primary);
+    border-bottom-color: var(--color-primary);
+}
+
+/* --- Tab Panels --- */
+.tab-panel {
+    display: none;
+    padding: 0.75rem 1rem;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.tab-panel.active {
+    display: block;
+}
+
+.placeholder-text {
+    color: var(--color-text-muted);
+    font-style: italic;
+    font-size: 0.85rem;
+    text-align: center;
+    padding: 2rem 0;
+    margin: 0;
+}
+
+/* Preview grid in output */
+.preview-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.preview-icon {
+    width: 36px;
+    height: 36px;
+    display: grid;
+    place-items: center;
+    background: var(--color-surface-dim);
+    border-radius: var(--radius-sm);
+    padding: 4px;
+}
+
+.preview-icon svg {
+    width: 100%;
+    height: 100%;
+}
+
+/* Sprite code */
+.sprite-code-wrap {
+    margin: 0;
+    padding: 0;
+    background: var(--color-surface-dim);
+    border-radius: var(--radius-sm);
+    overflow: auto;
+}
+
+.sprite-code {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    word-break: break-all;
+    display: block;
+    padding: 0.75rem;
+}
+
+/* Usage list */
+.usage-list li {
+    padding: 0.4rem 0;
+    border-bottom: 1px solid var(--color-border-light);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.usage-list li:last-child {
+    border-bottom: none;
+}
+
+.usage-snippet {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--color-text);
+    flex: 1;
     overflow: hidden;
-  }
-  /* The svg object from the icons folder*/
-  .svg-icon svg {
-    max-width: 100% !important;
-    max-height: calc(100% - 2.2em) !important;
-    all: unset !important;
-    width: 55px !important;
-    display: block !important;
-    margin: auto !important;
-  }
-  .icon-label {
-    max-width: 8.5em;
-  }
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
 
-  /* Hover styles - depending on the SVG markup, this may be stubborn! */
-  .svg-icon.active,
-  .svg-icon:focus,
-  .svg-icon:hover {
-    background: #007700;
+.usage-list .btn-copy-snippet {
+    flex-shrink: 0;
+}
+
+/* --- Output Actions --- */
+.output-actions {
+    padding: 0.75rem 1rem;
+    border-top: 1px solid var(--color-border-light);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.selection-count {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--color-text-muted);
+}
+
+.output-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+}
+
+/* --- Collection Nav --- */
+.collection-nav a {
+    display: block;
+    padding: 0.35rem 1rem;
+    font-size: 0.8rem;
+    color: var(--color-text);
+    border-left: 3px solid transparent;
+    transition: background 0.1s, border-color 0.1s;
+}
+
+.collection-nav a:hover {
+    background: var(--color-surface-dim);
+}
+
+.collection-nav a.active {
+    font-weight: 700;
+    color: var(--color-primary);
+    border-left-color: var(--color-primary);
+}
+
+/* --- Buttons --- */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.4rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    transition: background 0.15s, color 0.15s;
+}
+
+.btn-primary {
+    background: var(--color-primary);
+    color: var(--color-primary-text);
+}
+
+.btn-primary:hover:not(:disabled) {
+    background: var(--color-primary-hover);
+}
+
+.btn-secondary {
+    background: var(--color-surface);
+    color: var(--color-text);
+    border-color: var(--color-border);
+}
+
+.btn-secondary:hover:not(:disabled) {
+    background: var(--color-surface-dim);
+}
+
+.btn-ghost {
+    background: none;
+    color: var(--color-text-muted);
+    padding: 0.3rem 0.5rem;
+}
+
+.btn-ghost:hover {
+    color: var(--color-text);
+    background: var(--color-surface-dim);
+}
+
+.btn:disabled {
+    opacity: 0.4;
+    cursor: default;
+}
+
+.btn-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: none;
+    border-radius: var(--radius-sm);
+    background: none;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    transition: background 0.1s, color 0.1s;
+}
+
+.btn-icon:hover {
+    background: rgba(0, 0, 0, 0.08);
+    color: var(--color-text);
+}
+
+/* --- Main Content --- */
+.main-content {
+    padding: 1.5rem 2rem;
+    overflow-y: auto;
+}
+
+.page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.page-header h1 {
+    font-size: 1.5rem;
+    font-weight: 800;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* --- Search --- */
+.search-input {
+    padding: 0.4rem 0.75rem;
+    font: inherit;
+    font-size: 0.85rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background: var(--color-surface);
+    width: 200px;
+    transition: border-color 0.15s;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+}
+
+/* --- Collections (details/summary) --- */
+.collection {
+    margin-bottom: 1rem;
+    background: var(--color-surface);
+    border-radius: var(--radius);
+    border: 1px solid var(--color-border-light);
+    overflow: hidden;
+}
+
+.collection-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    user-select: none;
+    background: var(--color-surface);
+    transition: background 0.1s;
+    list-style: none;
+}
+
+.collection-header::-webkit-details-marker {
+    display: none;
+}
+
+.collection-header::before {
+    content: '▸';
+    display: inline-block;
+    margin-right: 0.5rem;
+    transition: transform 0.15s;
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+}
+
+.collection[open] > .collection-header::before {
+    transform: rotate(90deg);
+}
+
+.collection-header:hover {
+    background: var(--color-surface-dim);
+}
+
+.collection-header h3 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    flex: 1;
+}
+
+.collection-count {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    font-weight: 600;
+}
+
+/* --- Icon Grid --- */
+.icon-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(var(--icon-card-min), 1fr));
+    gap: 0.5rem;
+    padding: 0.75rem;
+    border-top: 1px solid var(--color-border-light);
+}
+
+/* --- Icon Card --- */
+.icon-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 2px solid transparent;
+    border-radius: var(--radius);
+    background: var(--color-surface-dim);
+    cursor: pointer;
+    transition: border-color 0.15s, background-color 0.15s, box-shadow 0.15s;
+    overflow: hidden;
+}
+
+.icon-card:hover {
+    border-color: var(--color-border);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+.icon-card.selected {
+    border-color: var(--color-selected);
+    background: var(--color-selected-light);
+}
+
+.icon-card.selected .icon-info {
+    color: var(--color-selected);
+    font-weight: 600;
+}
+
+/* Icon preview area */
+.icon-preview {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    aspect-ratio: 1;
+    padding: 1rem;
+}
+
+.icon-preview .svg-raw {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.icon-preview svg {
+    width: 48px;
+    height: 48px;
+}
+
+/* Icon info */
+.icon-info {
+    width: 100%;
+    padding: 0.25rem 0.5rem 0.4rem;
+    text-align: center;
+}
+
+.icon-label {
+    font-size: 0.65rem;
+    font-family: var(--font-mono);
+    color: var(--color-text-muted);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
+}
+
+/* Use snippet bar — visible when selected */
+.icon-use-snippet {
+    display: none;
+    width: 100%;
+    padding: 0.3rem 0.4rem;
+    background: var(--color-selected);
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.icon-card.selected .icon-use-snippet {
+    display: flex;
+}
+
+.use-code {
+    flex: 1;
+    font-family: var(--font-mono);
+    font-size: 0.55rem;
+    color: var(--color-primary-text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 1.3;
+}
+
+.btn-copy-use {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: var(--radius-sm);
+    color: var(--color-primary-text);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.1s;
+    padding: 0;
+}
+
+.btn-copy-use:hover {
+    background: rgba(255, 255, 255, 0.35);
+}
+
+.btn-copy-use .ui-icon {
+    width: 11px;
+    height: 11px;
+}
+
+/* Icon action buttons */
+.icon-actions {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    display: flex;
+    gap: 2px;
+    opacity: 0;
+    transition: opacity 0.15s;
+}
+
+.icon-card:hover .icon-actions {
+    opacity: 1;
+}
+
+.icon-actions .btn-icon {
+    width: 24px;
+    height: 24px;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(4px);
+    border-radius: var(--radius-sm);
+}
+
+.icon-actions .btn-icon:hover {
+    background: var(--color-surface);
+}
+
+/* UI icons used in buttons */
+.ui-icon {
+    width: 14px;
+    height: 14px;
+    fill: currentColor;
+}
+
+/* Selection checkmark overlay */
+.icon-card.selected::after {
+    content: '';
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    width: 18px;
+    height: 18px;
+    background: var(--color-selected);
+    border-radius: 50%;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z'/%3E%3C/svg%3E");
+    background-size: 12px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+/* Hidden when filtered out */
+.icon-card.hidden {
+    display: none;
+}
+
+.collection.hidden {
+    display: none;
+}
+
+/* --- Toast Notification --- */
+.toast {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    background: #333;
     color: #fff;
-  }
-  /* Removing the hover is a good way to hunt for path fill problems
-     Doesn't play nice with every collection, e.g. Material Icons
-  */
-  /*.svg-icon.active > .svg-copy svg,
-  .svg-icon:hover > .svg-copy svg * {
-    fill: #fff !important;
-  }*/
-
-  /* Hidden checkmark we use for sprite building */
-  .js-spritecheck {
-    position: absolute;
-    z-index: -1;
-  }
-  /* The number of SVGs in an accordion */
-  .svg-counter {
-    position: absolute;
-    top: 1.4em;
-    right: 1.5em;
-    z-index: 0;
-  }
-
-/*
-  2. Zany SVG sizing hacks
-  In the collections I'm testing I'm seeing enough consistently... rude styles
-  to make it worth a couple hacks :)
-  Bad problems get bad solutions
-
-  Sometimes you have to go deeper too, if the glyph is a certain way try
-  `[width="123.547"] *`
-*/
-svg[height="1024"],
-svg[width="1024"] {
-  transform: scale(0.05) !important;
+    padding: 0.6rem 1rem;
+    border-radius: var(--radius);
+    font-size: 0.8rem;
+    font-weight: 600;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.2s, transform 0.2s;
+    pointer-events: none;
+    z-index: 1000;
 }
 
-
-
-/* Scrollspy */
-a.active {
-  color: black;
-  font-weight: 700;
+.toast.show {
+    opacity: 1;
+    transform: translateY(0);
 }
 
-/* Copy paste tools */
-.w-icon-ui {
-  position: absolute;
-  bottom: 2px;
-  width: 100%;
-  font-size: 9px;
+/* --- Responsive --- */
+@media (max-width: 768px) {
+    .app-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .sidebar {
+        position: static;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .tab-panel {
+        max-height: 200px;
+    }
+
+    .main-content {
+        padding: 1rem;
+    }
+
+    .icon-grid {
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    }
 }
-.icon-ui-tiny {
-  padding: 5px;
-  border-radius: 3px;
-  cursor: pointer;
-}
-  .icon-ui-tiny svg {
-    width: 12px !important;
-    height: 12px !important;
-    fill: #555;
-  }
